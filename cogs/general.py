@@ -55,7 +55,7 @@ class General(commands.Cog, name="general"):
         :param context: The hybrid command context.
         """
         embed = discord.Embed(
-            description="Used [Krypton's](https://krypton.ninja) template",
+            description="Made with ♥ by SlyPrey",
             color=0x9C84EF
         )
         embed.set_author(
@@ -63,7 +63,7 @@ class General(commands.Cog, name="general"):
         )
         embed.add_field(
             name="Owner:",
-            value="Krypton#7331",
+            value="SlyPrey#6688",
             inline=True
         )
         embed.add_field(
@@ -246,6 +246,20 @@ class General(commands.Cog, name="general"):
                         color=0xE02B2B
                     )
                 await context.send(embed=embed)
+
+    @commands.hybrid_command(
+        name="csl",
+        description="Change the logo of the server.",
+    )
+    @checks.not_blacklisted()
+    async def csl(self, context=Context, *, message: discord.Message) -> None:
+        """
+        Get the status of the attachments.
+
+        :param context: The hybrid command context.
+        :param message: The message
+        """
+        pass
 
 
 async def setup(bot):
