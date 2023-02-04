@@ -100,7 +100,8 @@ class Fun(commands.Cog, name="fun"):
 
     @commands.hybrid_command(
         name="randomfact",
-        description="Get a random fact."
+        description="Get a random fact.",
+        aliases=["rf"]
     )
     @checks.not_blacklisted()
     async def randomfact(self, context: Context) -> None:
@@ -128,7 +129,8 @@ class Fun(commands.Cog, name="fun"):
 
     @commands.hybrid_command(
         name="coinflip",
-        description="Make a coin flip, but give your bet before."
+        description="Make a coin flip, but give your bet before.",
+        aliases=["cf"]
     )
     @checks.not_blacklisted()
     async def coinflip(self, context: Context) -> None:

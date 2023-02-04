@@ -2,7 +2,8 @@
 
 ## Version 5.6
 
-* [ ] Add a basic slur word filter
+* [ ] Add a TODO command
+* [ ] Add a change_server_logo command
 * [ ] Add a lock command that will let administrators temporary lock a channel, useful in case of a raid
 * [ ] Add an archive command that lets administrators archive a text channel in a text file
 
