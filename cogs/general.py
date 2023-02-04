@@ -8,10 +8,11 @@ Version: 5.5.0
 
 import platform
 import random
+import pickle
+import requests
 
 import aiohttp
 import discord
-import requests
 from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
@@ -278,6 +279,40 @@ class General(commands.Cog, name="general"):
 
                     '''update the guild icon with the data stored in img_data'''
                     await context.message.guild.edit(icon=img_data)
+    
+    @commands.hybrid_command(
+        name="todo",
+        description="Manage To-Dos.",
+    )
+    @checks.not_blacklisted()
+    async def todo(self, context=Context, *, task: str) -> None:
+        """
+        List, enlist, delist to-dos.
+
+        :param context: The hybrid command context.
+        :param task: The task to be done.
+        """
+        if task == "list":
+            await context.send("This command is in progress.")
+        if task == "delete":
+            await context.send("This command is in progress.")
+        if task == "clear":
+            with open(r"database\todos.dat", "wb") as tdl:
+                pass
+            embed = discord.Embed(
+                description=f"Successfully cleared your task list.",
+                color=0x9C84EF
+            )
+            await context.send(embed=embed)
+        else:
+            tl = [context.author.id, task]
+            with open(r"database\todos.dat", "ab") as tdl:
+                pickle.dump(tl, tdl)
+            embed = discord.Embed(
+                description=f"Successfully added the task **{task}**.",
+                color=0x9C84EF
+            )
+            await context.send(embed=embed)
 
 
 async def setup(bot):
