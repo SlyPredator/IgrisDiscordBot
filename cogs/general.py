@@ -11,6 +11,7 @@ import random
 
 import aiohttp
 import discord
+import requests
 from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
@@ -248,18 +249,35 @@ class General(commands.Cog, name="general"):
                 await context.send(embed=embed)
 
     @commands.hybrid_command(
-        name="csl",
+        name="change_server_logo",
         description="Change the logo of the server.",
+        aliases=["csl"]
     )
     @checks.not_blacklisted()
-    async def csl(self, context=Context, *, message: discord.Message) -> None:
+    async def change_server_logo(self, context=Context) -> None:
         """
         Get the status of the attachments.
 
         :param context: The hybrid command context.
         :param message: The message
         """
-        pass
+        if len(context.message.attachments) == 1:
+                img = context.message.attachments[0] # get the first attachment element from a lit of attachements
+                
+                '''if attachment is not a png, jpg, or jpeg image type, ignore'''
+                if img.filename.endswith(('.jpg','.png','.jpeg')):
+                    img_url = img.url
+
+                    '''use aiohttp Clientsession to asynchronously scrape the attachment url and read the data to a variable'''
+                    async with aiohttp.ClientSession() as session:
+                        async with session.get(img_url) as response:
+
+                            '''if site response, read the response data into img_data'''
+                            if response.status == 200:
+                                img_data = await response.read()
+
+                    '''update the guild icon with the data stored in img_data'''
+                    await context.message.guild.edit(icon=img_data)
 
 
 async def setup(bot):
