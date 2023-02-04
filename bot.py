@@ -190,15 +190,19 @@ async def on_command_completion(context: Context) -> None:
     split = full_command_name.split(" ")
     executed_command = str(split[0])
     if context.guild is not None:
-        log_messages = [f"Executed {executed_command} command in {context.guild.name} (ID: {context.guild.id}) by {context.author} (ID: {context.author.id})",
-        f"Executed {executed_command} command by {context.author} (ID: {context.author.id}) in DMs"]
+        log_messages = [f"Executed **{executed_command}** command in {context.guild.name} (ID: {context.guild.id}) by {context.author} (ID: {context.author.id})"]
         bot.logger.info(
             log_messages[0]
         )
+        channel = context.guild.get_channel(959014561749553192)
+        await channel.send(log_messages[0])
     else:
+        log_messages = [f"Executed **{executed_command}** command by {context.author} (ID: {context.author.id}) in DMs"]
         bot.logger.info(
-            log_messages[1]
+            log_messages[0]
             )
+        # channel = context.guild.get_channel(959014561749553192)
+        # await channel.send(log_messages[0])
 
 
 @bot.event
