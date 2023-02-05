@@ -22,9 +22,9 @@ class Moderation(commands.Cog, name="moderation"):
         name="kick",
         description="Kick a user out of the server.",
     )
-    @commands.has_permissions(kick_members=True)
     @commands.bot_has_permissions(kick_members=True)
     @checks.not_blacklisted()
+    @checks.is_moderator()
     @app_commands.describe(user="The user that should be kicked.", reason="The reason why the user should be kicked.")
     async def kick(self, context: Context, user: discord.User, *, reason: str = "Not specified") -> None:
         """
@@ -71,9 +71,9 @@ class Moderation(commands.Cog, name="moderation"):
         name="nick",
         description="Change the nickname of a user on a server.",
     )
-    @commands.has_permissions(manage_nicknames=True)
     @commands.bot_has_permissions(manage_nicknames=True)
     @checks.not_blacklisted()
+    @checks.is_moderator()
     @app_commands.describe(user="The user that should have a new nickname.", nickname="The new nickname that should be set.")
     async def nick(self, context: Context, user: discord.User, *, nickname: str = None) -> None:
         """
@@ -102,9 +102,9 @@ class Moderation(commands.Cog, name="moderation"):
         name="ban",
         description="Bans a user from the server.",
     )
-    @commands.has_permissions(ban_members=True)
     @commands.bot_has_permissions(ban_members=True)
     @checks.not_blacklisted()
+    @checks.is_moderator()
     @app_commands.describe(user="The user that should be banned.", reason="The reason why the user should be banned.")
     async def ban(self, context: Context, user: discord.User, *, reason: str = "Not specified") -> None:
         """
@@ -150,8 +150,8 @@ class Moderation(commands.Cog, name="moderation"):
         name="warning",
         description="Manage warnings of a user on a server.",
     )
-    @commands.has_permissions(manage_messages=True)
     @checks.not_blacklisted()
+    @checks.is_moderator()
     async def warning(self, context: Context) -> None:
         """
         Manage warnings of a user on a server.
@@ -170,7 +170,7 @@ class Moderation(commands.Cog, name="moderation"):
         description="Adds a warning to a user in the server.",
     )
     @checks.not_blacklisted()
-    @commands.has_permissions(manage_messages=True)
+    @checks.is_moderator()
     @app_commands.describe(user="The user that should be warned.", reason="The reason why the user should be warned.")
     async def warning_add(self, context: Context, user: discord.User, *, reason: str = "Not specified") -> None:
         """
@@ -203,7 +203,7 @@ class Moderation(commands.Cog, name="moderation"):
         description="Removes a warning from a user in the server.",
     )
     @checks.not_blacklisted()
-    @commands.has_permissions(manage_messages=True)
+    @checks.is_moderator()
     @app_commands.describe(user="The user that should get their warning removed.", warn_id="The ID of the warning that should be removed.")
     async def warning_remove(self, context: Context, user: discord.User, warn_id: int) -> None:
         """
@@ -225,8 +225,8 @@ class Moderation(commands.Cog, name="moderation"):
         name="list",
         description="Shows the warnings of a user in the server.",
     )
-    @commands.has_guild_permissions(manage_messages=True)
     @checks.not_blacklisted()
+    @checks.is_moderator()
     @app_commands.describe(user="The user you want to get the warnings of.")
     async def warning_list(self, context: Context, user: discord.User):
         """
@@ -253,9 +253,9 @@ class Moderation(commands.Cog, name="moderation"):
         name="purge",
         description="Delete a number of messages.",
     )
-    @commands.has_guild_permissions(manage_messages=True)
     @commands.bot_has_permissions(manage_messages=True)
     @checks.not_blacklisted()
+    @checks.is_moderator()
     @app_commands.describe(amount="The amount of messages that should be deleted.")
     async def purge(self, context: Context, amount: int) -> None:
         """
@@ -276,9 +276,9 @@ class Moderation(commands.Cog, name="moderation"):
         name="hackban",
         description="Bans a user without the user having to be in the server.",
     )
-    @commands.has_permissions(ban_members=True)
     @commands.bot_has_permissions(ban_members=True)
     @checks.not_blacklisted()
+    @checks.is_moderator()
     @app_commands.describe(user_id="The user ID that should be banned.", reason="The reason why the user should be banned.")
     async def hackban(self, context: Context, user_id: str, *, reason: str = "Not specified") -> None:
         """
@@ -311,9 +311,9 @@ class Moderation(commands.Cog, name="moderation"):
         name="lock",
         description="Lock a channel.",
     )
-    @commands.has_permissions(manage_messages=True)
     @commands.bot_has_permissions(manage_messages=True)
     @checks.not_blacklisted()
+    @checks.is_moderator()
     async def lock(self, context: Context) -> None:
         """
         Lock a channel.
@@ -321,15 +321,15 @@ class Moderation(commands.Cog, name="moderation"):
         :param context: The hybrid command context.
         """
         await context.message.channel.set_permissions(context.guild.default_role, send_messages=False)
+        await context.message.channel.set_permissions(context.guild.get_role(1071850619293417536), send_messages=True)
         await context.send(context.channel.mention + " ***is now in lockdown.***")
-
     @commands.hybrid_command(
         name="unlock",
         description="Unlock a channel.",
     )
-    @commands.has_permissions(manage_messages=True)
     @commands.bot_has_permissions(manage_messages=True)
     @checks.not_blacklisted()
+    @checks.is_moderator()
     async def unlock(self, context: Context) -> None:
         """
         Unlock a channel.

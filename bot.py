@@ -244,6 +244,17 @@ async def on_command_error(context: Context, error) -> None:
         await context.send(embed=embed)
         bot.logger.warning(
             f"{context.author} (ID: {context.author.id}) tried to execute an owner only command in the guild {context.guild.name} (ID: {context.guild.id}), but the user is not an owner of the bot.")
+    elif isinstance(error, exceptions.UserNotModerator):
+        """
+        Same as above, just for the @checks.is_moderator() check.
+        """
+        embed = discord.Embed(
+            description="You are not a moderator of the bot!",
+            color=0xE02B2B
+        )
+        await context.send(embed=embed)
+        bot.logger.warning(
+            f"{context.author} (ID: {context.author.id}) tried to execute a moderator command in the guild {context.guild.name} (ID: {context.guild.id}), but the user is not a moderator of the bot.")
     elif isinstance(error, commands.MissingPermissions):
         embed = discord.Embed(
             description="You are missing the permission(s) `" + ", ".join(

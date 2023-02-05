@@ -42,3 +42,16 @@ def not_blacklisted() -> Callable[[T], T]:
         return True
 
     return commands.check(predicate)
+
+def is_moderator() -> Callable[[T], T]:
+    """
+    This is a custom check to see if the user executing the command is a moderator of the bot.
+    """
+    async def predicate(context: commands.Context) -> bool:
+        with open(f"{os.path.realpath(os.path.dirname(__file__))}/../config.json") as file:
+            data = json.load(file)
+        if context.author.id not in data["moderators"]:
+            raise UserNotModerator
+        return True
+
+    return commands.check(predicate)
