@@ -200,9 +200,9 @@ class Owner(commands.Cog, name="owner"):
         name="say",
         description="The bot will say anything you want.",
     )
-    @app_commands.describe(message="The message that should be repeated by the bot", channelid="The ID of the channel where the message is to be sent to", message_id="Optional: The message ID to reply to")
+    @app_commands.describe(message="The message that should be repeated by the bot", channelid="Optional: The ID of the channel where the message is to be sent to", message_id="Optional: The message ID to reply to")
     @checks.is_owner()
-    async def say(self, context: Context, *, message: str, channelid: str, message_id: str = None) -> None:
+    async def say(self, context: Context, *, message: str, channelid: str = None, message_id: str = None) -> None:
         """
         The bot will say anything you want.
 
@@ -211,7 +211,9 @@ class Owner(commands.Cog, name="owner"):
         :param channelid: The ID of the channel where the message is to be sent.
         :param message_id: The ID of the message to be replied to.
         """
-        channel = context.guild.get_channel(int(channelid))
+        channel = context.channel
+        if channelid:
+            channel = context.guild.get_channel(int(channelid))
         if message_id:
             message_id_ = channel.get_partial_message(int(message_id))
             await message_id_.reply(message)
