@@ -296,7 +296,21 @@ class General(commands.Cog, name="general"):
         :param task: The task to be done.
         """
         if task == "list":
-            await context.send("This command is in progress.")
+            with open(r"database\todos.dat", "rb") as tdl:
+                n_list = []
+                user_id = context.author.id
+                try:
+                    while True:
+                        data = pickle.load(tdl)
+                        if user_id in data:
+                            n_list.append(data)
+                        else:
+                            continue
+                except EOFError:
+                    pass
+            task_str = ""
+            for each in n_list:
+                await context.send(each)
         if task == "delete":
             await context.send("This command is in progress.")
         if task == "clear":
@@ -307,8 +321,20 @@ class General(commands.Cog, name="general"):
                 color=0x9C84EF
             )
             await context.send(embed=embed)
-        else:
-            tl = [context.author.id, task]
+        elif task not in ["list", "delete", "clear"]:
+            n_list = rec = []
+            count = 0
+            user_id = context.author.id
+            with open(r"database\todos.dat",'rb') as f1:
+                try:
+                    while True:
+                        data = pickle.load(f1)
+                        n_list.append(data)
+                except EOFError:
+                    pass
+            for each in n_list:
+                count += each.count(user_id)
+            tl = [count+1, context.author.id, task]
             with open(r"database\todos.dat", "ab") as tdl:
                 pickle.dump(tl, tdl)
             embed = discord.Embed(
