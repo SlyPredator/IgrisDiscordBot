@@ -307,6 +307,37 @@ class Moderation(commands.Cog, name="moderation"):
             )
             await context.send(embed=embed)
 
+    @commands.hybrid_command(
+        name="lock",
+        description="Lock a channel.",
+    )
+    @commands.has_permissions(manage_messages=True)
+    @commands.bot_has_permissions(manage_messages=True)
+    @checks.not_blacklisted()
+    async def lock(self, context: Context) -> None:
+        """
+        Lock a channel.
+
+        :param context: The hybrid command context.
+        """
+        await context.message.channel.set_permissions(context.guild.default_role, send_messages=False)
+        await context.send(context.channel.mention + " ***is now in lockdown.***")
+
+    @commands.hybrid_command(
+        name="unlock",
+        description="Unlock a channel.",
+    )
+    @commands.has_permissions(manage_messages=True)
+    @commands.bot_has_permissions(manage_messages=True)
+    @checks.not_blacklisted()
+    async def unlock(self, context: Context) -> None:
+        """
+        Unlock a channel.
+
+        :param context: The hybrid command context.
+        """
+        await context.message.channel.set_permissions(context.guild.default_role, send_messages=True)
+        await context.send(context.channel.mention + " ***is now unlocked.***")
 
 async def setup(bot):
     await bot.add_cog(Moderation(bot))
