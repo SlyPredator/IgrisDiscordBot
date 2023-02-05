@@ -16,20 +16,20 @@ from discord.ext.commands import Context
 from helpers import checks
 
 
-class Choice(discord.ui.View):
-    def __init__(self):
-        super().__init__()
-        self.value = None
+# class Choice(discord.ui.View):
+#     def __init__(self):
+#         super().__init__()
+#         self.value = None
 
-    @discord.ui.button(label="Heads", style=discord.ButtonStyle.blurple)
-    async def confirm(self, button: discord.ui.Button, interaction: discord.Interaction):
-        self.value = "heads"
-        self.stop()
+#     @discord.ui.button(label="Heads", style=discord.ButtonStyle.blurple)
+#     async def confirm(self, button: discord.ui.Button, interaction: discord.Interaction):
+#         self.value = "heads"
+#         self.stop()
 
-    @discord.ui.button(label="Tails", style=discord.ButtonStyle.blurple)
-    async def cancel(self, button: discord.ui.Button, interaction: discord.Interaction):
-        self.value = "tails"
-        self.stop()
+#     @discord.ui.button(label="Tails", style=discord.ButtonStyle.blurple)
+#     async def cancel(self, button: discord.ui.Button, interaction: discord.Interaction):
+#         self.value = "tails"
+#         self.stop()
 
 
 class RockPaperScissors(discord.ui.Select):
@@ -129,35 +129,23 @@ class Fun(commands.Cog, name="fun"):
 
     @commands.hybrid_command(
         name="coinflip",
-        description="Make a coin flip, but give your bet before.",
+        description="Make a coin flip.",
         aliases=["cf"]
     )
     @checks.not_blacklisted()
     async def coinflip(self, context: Context) -> None:
         """
-        Make a coin flip, but give your bet before.
+        Make a coin flip.
 
         :param context: The hybrid command context.
         """
-        buttons = Choice()
-        embed = discord.Embed(
-            description="What is your bet?",
-            color=0x9C84EF
-        )
-        message = await context.send(embed=embed, view=buttons)
-        await buttons.wait()  # We wait for the user to click a button.
         result = random.choice(["heads", "tails"])
-        if buttons.value == result:
-            embed = discord.Embed(
-                description=f"Correct! You guessed `{buttons.value}` and I flipped the coin to `{result}`.",
+        coin = "<a:coin1:959392316710338630>"
+        embed = discord.Embed(
+                description=f"{coin} **{context.author.name}** chose **{result}**! {coin}",
                 color=0x9C84EF
             )
-        else:
-            embed = discord.Embed(
-                description=f"Woops! You guessed `{buttons.value}` and I flipped the coin to `{result}`, better luck next time!",
-                color=0xE02B2B
-            )
-        await message.edit(embed=embed, view=None, content=None)
+        await context.send(embed=embed)
 
     @commands.hybrid_command(
         name="rps",
