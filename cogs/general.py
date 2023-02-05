@@ -267,14 +267,20 @@ class General(commands.Cog, name="general"):
         description="Manage To-Dos.",
     )
     @checks.not_blacklisted()
-    async def todo(self, context=Context, *, task: str) -> None:
+    async def todo(self, context=Context, *, task: str = None) -> None:
         """
         List, enlist, delist to-dos.
 
         :param context: The hybrid command context.
         :param task: The task to be done.
         """
-        if task == "list":
+        if task is None:
+            embed = discord.Embed(
+                description="You need to specify a subcommand.\n\n**Subcommands:**\n`<taskname>` - Add a task to your list.\n`list` - View your task list.\n`delete` - Remove a task from your list.\n`clear` - Clear your task list.",
+                color=0xE02B2B
+            )
+            await context.send(embed=embed)
+        if task == "list" and task != None:
             with open(r"database\todos.dat", "rb") as tdl:
                 n_list = []
                 user_id = context.author.id
@@ -290,9 +296,9 @@ class General(commands.Cog, name="general"):
             task_str = ""
             for each in n_list:
                 await context.send(each)
-        if task == "delete":
+        if task == "delete" and task != None:
             await context.send("This command is in progress.")
-        if task == "clear":
+        if task == "clear" and task != None:
             with open(r"database\todos.dat", "wb") as tdl:
                 pass
             embed = discord.Embed(
@@ -300,7 +306,7 @@ class General(commands.Cog, name="general"):
                 color=0x9C84EF
             )
             await context.send(embed=embed)
-        elif task not in ["list", "delete", "clear"]:
+        elif task not in ["list", "delete", "clear", None]:
             n_list = rec = []
             count = 0
             user_id = context.author.id
