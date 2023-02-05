@@ -89,6 +89,24 @@ class Fun(commands.Cog, name="fun"):
             )
         await context.send(embed=embed)
 
+    @commands.hybrid_command(
+        name="roll",
+        description="Roll a random number within a given range.",
+        aliases=["r"]
+    )
+    @checks.not_blacklisted()
+    async def roll(self, context: Context, max_range: str = "100") -> None:
+        """
+        Roll a random number within a given range.
+
+        :param context: The hybrid command context.
+        """
+        result = random.randint(0, int(max_range))
+        embed = discord.Embed(
+                description=f":game_die: **{context.author.name}** rolls **{result}**! :game_die:",
+                color=0x9C84EF
+            )
+        await context.send(embed=embed)
 
 async def setup(bot):
     await bot.add_cog(Fun(bot))
