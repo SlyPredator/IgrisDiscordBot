@@ -81,11 +81,11 @@ class Fun(commands.Cog, name="fun"):
 
         :param context: The hybrid command context.
         """
-        choices = {"Rock": ":rock:", "Paper":":roll_of_paper:", "Scissors":":scissors:"}
+        choices = {"Rock": [":rock:", 0xFFFFFF], "Paper":[":roll_of_paper:", 0xC4C3D0], "Scissors":[":scissors:", 0xFB4D46]}
         result = random.choice([x for x in choices])
         embed = discord.Embed(
-                description=f" **{choices[result]} {context.author.name}** chose **{result}**! {choices[result]}",
-                color=0x9C84EF
+                description=f" **{choices[result][0]} {context.author.name}** chose **{result}**! {choices[result][0]}",
+                color=choices[result][1]
             )
         await context.send(embed=embed)
 
