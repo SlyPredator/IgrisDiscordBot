@@ -153,9 +153,10 @@ async def on_ready() -> None:
         f"Running on: {platform.system()} {platform.release()} ({os.name})")
     bot.logger.info("-------------------")
     status_task.start()
+    await bot.tree.sync(guild=discord.Object(id=925389494302154823))
     if config["sync_commands_globally"]:
         bot.logger.info("Syncing commands globally...")
-        await bot.tree.sync()
+        await bot.tree.sync(guild=discord.Object(id=925389494302154823))
 
 
 @tasks.loop(minutes=1.0)
