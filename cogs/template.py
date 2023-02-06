@@ -20,7 +20,7 @@ class Template(commands.Cog, name="template"):
     # Here you can just add your own commands, you'll always need to provide "self" as first parameter.
 
     @commands.hybrid_command(
-        name="testcommand",
+        name="test",
         description="This is a testing command that does nothing.",
     )
     # This will only allow non-blacklisted members to execute the command
@@ -34,7 +34,6 @@ class Template(commands.Cog, name="template"):
         :param context: The application command context.
         """
         await context.send("This works.")
-        purge = await context.channel.purge(limit=2)
 
 
 # And then we finally add the cog to the bot so that it can load, unload, reload and use it's content.

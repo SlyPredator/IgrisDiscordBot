@@ -10,6 +10,8 @@ import platform
 import random
 import pickle
 import requests
+import re
+from num2words import num2words
 
 import aiohttp
 import discord
@@ -382,6 +384,49 @@ class General(commands.Cog, name="general"):
                 color=0x9C84EF
             )
             await context.send(embed=embed)
+
+    @commands.hybrid_command(
+        name="poll",
+        description="Create a poll.",
+    )
+    @checks.not_blacklisted()
+    async def poll(self, context: Context) -> None:
+        """
+        Create a poll.
+
+        :param context: The hybrid command context.
+        """
+        poll_options = re.findall('"([^"]*)"', context.message.content)
+        poll_question = context.message.content.partition("\"")[0].split("*poll")[1]
+        embed = discord.Embed(
+            description=f"{context.author.name}'s Poll",
+            color=0x9C84EF
+        )
+        embed.set_author(
+            name=f"{poll_question}"
+        )
+        if len(poll_options) != 0:
+            for each in poll_options:
+                opt_num = num2words(poll_options.index(each) + 1)
+                embed.add_field(
+                    name=f":{opt_num}: {each}",
+                    value="",
+                    inline=False
+                )
+        else:
+            embed.add_field(
+                name="Poll options are empty!",
+                value="",
+                inline=False
+            )
+        embed.set_footer(
+            text=f"Requested by {context.author}"
+        )
+        purge = await context.channel.purge(limit=1)
+        poll_embed = await context.send(embed=embed)
+        for num in range(1, len(poll_options)+1):
+            emojiname = str(num) + '\ufe0f\u20e3'
+            await poll_embed.add_reaction(emojiname)
 
 
 async def setup(bot):
