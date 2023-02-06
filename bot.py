@@ -178,6 +178,8 @@ async def on_message(message: discord.Message) -> None:
     if message.author == bot.user or message.author.bot:
         return
     await bot.process_commands(message)
+    if message.content.lower() == "skull" :
+        await message.reply("Skull indeed.")
 
 
 @bot.event
