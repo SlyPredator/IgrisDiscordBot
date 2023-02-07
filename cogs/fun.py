@@ -99,6 +99,7 @@ class Fun(commands.Cog, name="fun"):
         Roll a random number within a given range.
 
         :param context: The hybrid command context.
+        :param max_range: The upper end of the range.
         """
         result = random.randint(0, int(max_range))
         embed = discord.Embed(
@@ -107,6 +108,20 @@ class Fun(commands.Cog, name="fun"):
         )
         await context.send(embed=embed)
 
+    @commands.hybrid_command(
+        name="pick",
+        description="Pick a choice amongst given choices.",
+    )
+    @checks.not_blacklisted()
+    async def roll(self, context: Context, *, choices: str) -> None:
+        """
+        Pick a choice amongst given choices.
+
+        :param context: The hybrid command context.
+        :param choices: The choices available to pick from.
+        """
+        choice = random.choice(choices.split(" "))
+        await context.send(choice)
 
 async def setup(bot):
     await bot.add_cog(Fun(bot))
