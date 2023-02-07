@@ -27,3 +27,13 @@ class UserNotOwner(commands.CheckFailure):
     def __init__(self, message="User is not an owner of the bot!"):
         self.message = message
         super().__init__(self.message)
+
+
+class UserNotModerator(commands.CheckFailure):
+    """
+    Thrown when a user is attempting something, but it not a moderator of the bot.
+    """
+
+    def __init__(self, message="User is not a moderator of the bot!"):
+        self.message = message
+        super().__init__(self.message)
