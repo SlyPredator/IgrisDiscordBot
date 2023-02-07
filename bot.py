@@ -307,4 +307,4 @@ async def load_cogs() -> None:
 
 asyncio.run(init_db())
 asyncio.run(load_cogs())
-bot.run(token)
+bot.run(config["token"])

@@ -323,7 +323,7 @@ class Moderation(commands.Cog, name="moderation"):
         await context.message.channel.set_permissions(context.guild.default_role, send_messages=False)
         await context.message.channel.set_permissions(context.guild.get_role(1071850619293417536), send_messages=True)
         await context.send(context.channel.mention + " ***is now in lockdown.***")
-
+        
     @commands.hybrid_command(
         name="unlock",
         description="Unlock a channel.",
