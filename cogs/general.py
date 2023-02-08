@@ -12,6 +12,7 @@ import random
 import re
 
 import aiohttp
+import aiosqlite
 import discord
 import requests
 from discord import app_commands
@@ -19,7 +20,7 @@ from discord.ext import commands
 from discord.ext.commands import Context
 from num2words import num2words
 
-from helpers import checks
+from helpers import checks, db_manager
 
 
 class General(commands.Cog, name="general"):
@@ -278,26 +279,16 @@ class General(commands.Cog, name="general"):
             )
             await context.send(embed=embed)
         if task == "list" and task != None:
-            with open(r"database\todos.dat", "rb") as tdl:
-                n_list = []
-                user_id = context.author.id
-                try:
-                    while True:
-                        data = pickle.load(tdl)
-                        if user_id in data:
-                            n_list.append(data)
-                        else:
-                            continue
-                except EOFError:
-                    pass
+            await context.send("This is the todos-db branch.")
+            todos_list = await db_manager.get_user_todos(context.author.id)
             embed = discord.Embed(
                 description=f"List of {context.author.name}'s To-Dos.\n", color=0x9C84EF
             )
             embed.set_author(name="To-Do List")
-            if len(n_list) != 0:
-                for each in n_list:
+            if len(todos_list) != 0:
+                for each in enumerate(todos_list):
                     embed.add_field(
-                        name=f"__Task {each[0]}__", value=f"{each[2]}", inline=False
+                        name=f"__Task {each[0] + 1}__", value=f"{each[1][0]}", inline=False
                     )
             else:
                 embed.add_field(name="Make some to-dos!", value="", inline=False)
