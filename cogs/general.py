@@ -12,6 +12,7 @@ import random
 import re
 
 import aiohttp
+import aiosqlite
 import discord
 import requests
 from discord import app_commands
@@ -19,7 +20,7 @@ from discord.ext import commands
 from discord.ext.commands import Context
 from num2words import num2words
 
-from helpers import checks
+from helpers import checks, db_manager
 
 
 class General(commands.Cog, name="general"):
@@ -277,91 +278,39 @@ class General(commands.Cog, name="general"):
                 color=0xE02B2B,
             )
             await context.send(embed=embed)
-        if task == "list" and task != None:
-            with open(r"database\todos.dat", "rb") as tdl:
-                n_list = []
-                user_id = context.author.id
-                try:
-                    while True:
-                        data = pickle.load(tdl)
-                        if user_id in data:
-                            n_list.append(data)
-                        else:
-                            continue
-                except EOFError:
-                    pass
+        if task.split(" ")[0] == "list" and task != None:
+            todos_list = await db_manager.get_user_todos(context.author.id)
             embed = discord.Embed(
                 description=f"List of {context.author.name}'s To-Dos.\n", color=0x9C84EF
             )
             embed.set_author(name="To-Do List")
-            if len(n_list) != 0:
-                for each in n_list:
+            if len(todos_list) != 0:
+                for each in enumerate(todos_list):
                     embed.add_field(
-                        name=f"__Task {each[0]}__", value=f"{each[2]}", inline=False
+                        name=f"__Task {each[0] + 1}__",
+                        value=f"{each[1][0]}",
+                        inline=False,
                     )
             else:
                 embed.add_field(name="Make some to-dos!", value="", inline=False)
             embed.set_footer(text=f"Requested by {context.author}")
             await context.send(embed=embed)
         if task.split(" ")[0] == "delete" and task != None:
-            n_list = []
-            with open(r"database\todos.dat", "rb") as f:
-                user_id = int(context.author.id)
-                task_d = int(str(context.message.content).split(" ")[2])
-                try:
-                    while True:
-                        data = pickle.load(f)
-                        if user_id in data and task_d in data:
-                            continue
-                        else:
-                            n_list.append(data)
-                except EOFError:
-                    pass
-            with open(r"database\todos.dat", "wb") as f1:
-                for each in n_list:
-                    pickle.dump(each, f1)
-                embed = discord.Embed(
-                    description=f"Successfully deleted task {task_d}.", color=0x9C84EF
-                )
-                await context.send(embed=embed)
-        if task == "clear" and task != None:
-            n_list = []
-            with open(r"database\todos.dat", "rb") as f:
-                user_id = int(context.author.id)
-                try:
-                    while True:
-                        data = pickle.load(f)
-                        if user_id in data:
-                            continue
-                        else:
-                            n_list.append(data)
-                except EOFError:
-                    pass
-            with open(r"database\todos.dat", "wb") as f1:
-                for each in n_list:
-                    pickle.dump(each, f1)
-                embed = discord.Embed(
-                    description=f"Successfully cleared your task list.", color=0x9C84EF
-                )
-                await context.send(embed=embed)
-        elif task.split(" ")[0] not in ["list", "delete", "clear", None]:
-            n_list = rec = []
-            count = 0
-            user_id = context.author.id
-            with open(r"database\todos.dat", "rb") as f1:
-                try:
-                    while True:
-                        data = pickle.load(f1)
-                        n_list.append(data)
-                except EOFError:
-                    pass
-            for each in n_list:
-                count += each.count(user_id)
-            tl = [count + 1, context.author.id, task]
-            with open(r"database\todos.dat", "ab") as tdl:
-                pickle.dump(tl, tdl)
+            todo = await db_manager.delete_user_todo(context.author.id, int(task.split(" ")[1]))
             embed = discord.Embed(
-                description=f"Successfully added the task **{task}**.", color=0x9C84EF
+                description=f"Successfully deleted task {todo}.", color=0x9C84EF
+            )
+            await context.send(embed=embed)
+        if task.split(" ")[0] ==  "clear" and task != None:
+            await db_manager.clear_user_todos(context.author.id)
+            embed = discord.Embed(
+                description=f"Successfully cleared your task list.", color=0x9C84EF
+            )
+            await context.send(embed=embed)
+        elif task.split(" ")[0] not in ["list", "delete", "clear", None]:
+            todo = await db_manager.add_todo(context.author.id, task)
+            embed = discord.Embed(
+                description=f"Successfully added the task **{todo}**.", color=0x9C84EF
             )
             await context.send(embed=embed)
 

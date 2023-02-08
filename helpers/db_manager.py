@@ -157,3 +157,68 @@ async def get_warnings(user_id: int, server_id: int) -> list:
             for row in result:
                 result_list.append(row)
             return result_list
+
+
+async def get_user_todos(user_id: int) -> list:
+    """
+    This function will return the list of all todos of a user.
+
+    :param user_id: The ID of the user that should be checked.
+    :return: A list of the todos of the user.
+    """
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        async with db.execute(
+            f"SELECT task FROM todos WHERE user_id = {user_id}"
+        ) as cursor:
+            result = await cursor.fetchall()
+            return result
+
+
+async def clear_user_todos(user_id: int):
+    """
+    This function will clear the list of all todos of a user.
+
+    :param user_id: The ID of the user that should be checked.
+    """
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        await db.execute("DELETE FROM todos WHERE user_id=?", (user_id,))
+        await db.commit()
+
+
+async def add_todo(user_id: int, todo: str):
+    """
+    This function will add a user's todo to the database.
+
+    :param user_id: The ID of the user whose todo is to be added.
+    :param todo: The task to be assigned to the user.
+    """
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        await db.execute(
+            "INSERT INTO todos(user_id, task) VALUES (?, ?)",
+            (user_id, todo),
+        )
+        await db.commit()
+        return todo
+
+
+async def delete_user_todo(user_id: int, task_id: int):
+    """
+    This function will delete a particular task of a user.
+
+    :param user_id: The ID of the user that should be checked.
+    :param task_id: The task number of the todo to delete
+    """
+    task_result = ""
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        async with db.execute(
+            f"SELECT task FROM todos WHERE user_id = {user_id}"
+        ) as cursor:
+            result = await cursor.fetchall()
+            for each in enumerate(result,1):
+                if each[0] == task_id:
+                    task_result = each[1][0]
+                    print(task_result)
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        await db.execute(f"DELETE FROM todos WHERE task='{task_result}';")
+        await db.commit()
+        return task_result
