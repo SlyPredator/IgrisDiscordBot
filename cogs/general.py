@@ -279,7 +279,6 @@ class General(commands.Cog, name="general"):
             )
             await context.send(embed=embed)
         if task.split(" ")[0] == "list" and task != None:
-            await context.send("This is the todos-db branch.")
             todos_list = await db_manager.get_user_todos(context.author.id)
             embed = discord.Embed(
                 description=f"List of {context.author.name}'s To-Dos.\n", color=0x9C84EF
@@ -297,26 +296,11 @@ class General(commands.Cog, name="general"):
             embed.set_footer(text=f"Requested by {context.author}")
             await context.send(embed=embed)
         if task.split(" ")[0] == "delete" and task != None:
-            n_list = []
-            with open(r"database\todos.dat", "rb") as f:
-                user_id = int(context.author.id)
-                task_d = int(str(context.message.content).split(" ")[2])
-                try:
-                    while True:
-                        data = pickle.load(f)
-                        if user_id in data and task_d in data:
-                            continue
-                        else:
-                            n_list.append(data)
-                except EOFError:
-                    pass
-            with open(r"database\todos.dat", "wb") as f1:
-                for each in n_list:
-                    pickle.dump(each, f1)
-                embed = discord.Embed(
-                    description=f"Successfully deleted task {task_d}.", color=0x9C84EF
-                )
-                await context.send(embed=embed)
+            todo = await db_manager.delete_user_todo(context.author.id, int(task.split(" ")[1]))
+            embed = discord.Embed(
+                description=f"Successfully deleted task {todo}.", color=0x9C84EF
+            )
+            await context.send(embed=embed)
         if task.split(" ")[0] ==  "clear" and task != None:
             await db_manager.clear_user_todos(context.author.id)
             embed = discord.Embed(
