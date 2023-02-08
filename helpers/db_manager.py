@@ -157,3 +157,16 @@ async def get_warnings(user_id: int, server_id: int) -> list:
             for row in result:
                 result_list.append(row)
             return result_list
+
+
+async def get_user_todos(user_id: int) -> list:
+    """
+    This function will return the list of all todos of a user.
+
+    :param user_id: The ID of the user that should be checked.
+    :return: A list of the todos of the user.
+    """
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        async with db.execute(f"SELECT task FROM todos WHERE user_id = {user_id}") as cursor:
+            result = await cursor.fetchall()
+            return result

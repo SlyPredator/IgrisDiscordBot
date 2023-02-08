@@ -11,3 +11,8 @@ CREATE TABLE IF NOT EXISTS `warns` (
   `reason` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS `todos` (
+  `user_id` varchar(20) NOT NULL,
+  `task` varchar(50) NOT NULL
+);
