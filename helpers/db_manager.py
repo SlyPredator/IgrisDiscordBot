@@ -214,7 +214,7 @@ async def delete_user_todo(user_id: int, task_id: int):
             f"SELECT task FROM todos WHERE user_id = {user_id}"
         ) as cursor:
             result = await cursor.fetchall()
-            for each in enumerate(result,1):
+            for each in enumerate(result, 1):
                 if each[0] == task_id:
                     task_result = each[1][0]
                     print(task_result)

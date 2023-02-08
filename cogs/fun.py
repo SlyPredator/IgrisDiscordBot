@@ -123,5 +123,6 @@ class Fun(commands.Cog, name="fun"):
         choice = random.choice(choices.split(" "))
         await context.send(choice)
 
+
 async def setup(bot):
     await bot.add_cog(Fun(bot))

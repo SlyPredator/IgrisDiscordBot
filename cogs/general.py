@@ -270,7 +270,7 @@ class General(commands.Cog, name="general"):
         List, enlist, delist to-dos.
 
         :param context: The hybrid command context.
-        :param task: The task to be done.
+        :param task: The task to be added.
         """
         if task is None:
             embed = discord.Embed(
@@ -296,12 +296,14 @@ class General(commands.Cog, name="general"):
             embed.set_footer(text=f"Requested by {context.author}")
             await context.send(embed=embed)
         if task.split(" ")[0] == "delete" and task != None:
-            todo = await db_manager.delete_user_todo(context.author.id, int(task.split(" ")[1]))
+            todo = await db_manager.delete_user_todo(
+                context.author.id, int(task.split(" ")[1])
+            )
             embed = discord.Embed(
                 description=f"Successfully deleted task {todo}.", color=0x9C84EF
             )
             await context.send(embed=embed)
-        if task.split(" ")[0] ==  "clear" and task != None:
+        if task.split(" ")[0] == "clear" and task != None:
             await db_manager.clear_user_todos(context.author.id)
             embed = discord.Embed(
                 description=f"Successfully cleared your task list.", color=0x9C84EF
