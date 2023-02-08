@@ -278,7 +278,7 @@ class General(commands.Cog, name="general"):
                 color=0xE02B2B,
             )
             await context.send(embed=embed)
-        if task == "list" and task != None:
+        if task.split(" ")[0] == "list" and task != None:
             await context.send("This is the todos-db branch.")
             todos_list = await db_manager.get_user_todos(context.author.id)
             embed = discord.Embed(
@@ -317,30 +317,16 @@ class General(commands.Cog, name="general"):
                     description=f"Successfully deleted task {task_d}.", color=0x9C84EF
                 )
                 await context.send(embed=embed)
-        if task == "clear" and task != None:
+        if task.split(" ")[0] ==  "clear" and task != None:
             await db_manager.clear_user_todos(context.author.id)
             embed = discord.Embed(
                 description=f"Successfully cleared your task list.", color=0x9C84EF
             )
             await context.send(embed=embed)
         elif task.split(" ")[0] not in ["list", "delete", "clear", None]:
-            n_list = rec = []
-            count = 0
-            user_id = context.author.id
-            with open(r"database\todos.dat", "rb") as f1:
-                try:
-                    while True:
-                        data = pickle.load(f1)
-                        n_list.append(data)
-                except EOFError:
-                    pass
-            for each in n_list:
-                count += each.count(user_id)
-            tl = [count + 1, context.author.id, task]
-            with open(r"database\todos.dat", "ab") as tdl:
-                pickle.dump(tl, tdl)
+            todo = await db_manager.add_todo(context.author.id, task)
             embed = discord.Embed(
-                description=f"Successfully added the task **{task}**.", color=0x9C84EF
+                description=f"Successfully added the task **{todo}**.", color=0x9C84EF
             )
             await context.send(embed=embed)
 

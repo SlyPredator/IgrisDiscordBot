@@ -183,3 +183,18 @@ async def clear_user_todos(user_id: int):
     async with aiosqlite.connect(DATABASE_PATH) as db:
         await db.execute("DELETE FROM todos WHERE user_id=?", (user_id,))
         await db.commit()
+
+
+async def add_todo(user_id: int, todo: str):
+    """
+    This function will add a user's todo to the database.
+
+    :param user_id: The ID of the user whose todo is to be added.
+    """
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        await db.execute(
+            "INSERT INTO todos(user_id, task) VALUES (?, ?)",
+            (user_id, todo),
+        )
+        await db.commit()
+        return todo
