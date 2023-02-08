@@ -22,7 +22,7 @@ Pull requests are the best way to propose changes to the codebase. We actively w
 
 1. Fork the repo and create your branch from `main`.
 2. Keep consistency with the current state of the codebase, this includes but is not limited to naming convention, Discord embeds, etc.
-3. Format the code of the files you've edited with the **autopep8** formatter.
+3. Format the code of the files you've edited with the **black** formatter.
 4. Issue that pull request!
 
 ## Commit messages guidelines
@@ -30,8 +30,8 @@ This project uses [`Conventional Commits 1.0.0`](https://conventionalcommits.org
 
 It would be more than welcome to keep your contributions as a single commit rather than, for examples, 20 `"fix: Stuff"` commits in-between. You may use multiple commmits if you believe the changes made in these commmits have nothing, or close to nothing, in common - feel free to ask a maintainer on whether or not it should be a single commit or not.
 
-## Create a GitHub [Issue](https://github.com/kkrypt0nn/Python-Discord-Bot-Template/issues) and **then** a pull request
-Start contributing by first [opening a new issue](https://github.com/kkrypt0nn/Python-Discord-Bot-Template/issues/new/choose). Once that is done, you can create a pull request for the issue.
+## Create a GitHub [Issue](https://github.com/SlyPredator/IgrisDiscordBot) and **then** a pull request
+Start contributing by first [opening a new issue](https://github.com/SlyPredator/IgrisDiscordBot). Once that is done, you can create a pull request for the issue.
 
 ## License
 Your submissions are understood to be under the same [Apache License 2.0](https://github.com/kkrypt0nn/Python-Discord-Bot-Template/blob/main/LICENSE.md) that covers the project.
