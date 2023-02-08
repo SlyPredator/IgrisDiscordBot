@@ -288,7 +288,9 @@ class General(commands.Cog, name="general"):
             if len(todos_list) != 0:
                 for each in enumerate(todos_list):
                     embed.add_field(
-                        name=f"__Task {each[0] + 1}__", value=f"{each[1][0]}", inline=False
+                        name=f"__Task {each[0] + 1}__",
+                        value=f"{each[1][0]}",
+                        inline=False,
                     )
             else:
                 embed.add_field(name="Make some to-dos!", value="", inline=False)
@@ -316,25 +318,11 @@ class General(commands.Cog, name="general"):
                 )
                 await context.send(embed=embed)
         if task == "clear" and task != None:
-            n_list = []
-            with open(r"database\todos.dat", "rb") as f:
-                user_id = int(context.author.id)
-                try:
-                    while True:
-                        data = pickle.load(f)
-                        if user_id in data:
-                            continue
-                        else:
-                            n_list.append(data)
-                except EOFError:
-                    pass
-            with open(r"database\todos.dat", "wb") as f1:
-                for each in n_list:
-                    pickle.dump(each, f1)
-                embed = discord.Embed(
-                    description=f"Successfully cleared your task list.", color=0x9C84EF
-                )
-                await context.send(embed=embed)
+            await db_manager.clear_user_todos(context.author.id)
+            embed = discord.Embed(
+                description=f"Successfully cleared your task list.", color=0x9C84EF
+            )
+            await context.send(embed=embed)
         elif task.split(" ")[0] not in ["list", "delete", "clear", None]:
             n_list = rec = []
             count = 0

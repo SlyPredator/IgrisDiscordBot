@@ -167,6 +167,19 @@ async def get_user_todos(user_id: int) -> list:
     :return: A list of the todos of the user.
     """
     async with aiosqlite.connect(DATABASE_PATH) as db:
-        async with db.execute(f"SELECT task FROM todos WHERE user_id = {user_id}") as cursor:
+        async with db.execute(
+            f"SELECT task FROM todos WHERE user_id = {user_id}"
+        ) as cursor:
             result = await cursor.fetchall()
             return result
+
+
+async def clear_user_todos(user_id: int):
+    """
+    This function will clear the list of all todos of a user.
+
+    :param user_id: The ID of the user that should be checked.
+    """
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        await db.execute("DELETE FROM todos WHERE user_id=?", (user_id,))
+        await db.commit()
