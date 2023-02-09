@@ -149,3 +149,5 @@ discord.log
 # Choice Files
 TODO.md
 todos.dat
+lore.txt
+cogs/private.py

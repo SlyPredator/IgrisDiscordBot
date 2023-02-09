@@ -29,21 +29,24 @@ class General(commands.Cog, name="general"):
             title="Help", description="List of available commands:", color=0x9C84EF
         )
         for i in self.bot.cogs:
-            cog = self.bot.get_cog(i.lower())
-            commands = cog.get_commands()
-            data = []
-            for command in commands:
-                description = command.description.partition("\n")[0]
-                if command.aliases:
-                    data.append(
-                        f"{prefix}{command.name} ({command.aliases[0]}) - {description}"
-                    )
-                else:
-                    data.append(f"{prefix}{command.name} - {description}")
-            help_text = "\n".join(data)
-            embed.add_field(
-                name=i.capitalize(), value=f"```{help_text}```", inline=False
-            )
+            if i in ["template", "private"]:
+                continue
+            else:
+                cog = self.bot.get_cog(i.lower())
+                commands = cog.get_commands()
+                data = []
+                for command in commands:
+                    description = command.description.partition("\n")[0]
+                    if command.aliases:
+                        data.append(
+                            f"{prefix}{command.name} ({command.aliases[0]}) - {description}"
+                        )
+                    else:
+                        data.append(f"{prefix}{command.name} - {description}")
+                help_text = "\n".join(data)
+                embed.add_field(
+                    name=i.capitalize(), value=f"```{help_text}```", inline=False
+                )
         await context.send(embed=embed)
 
     @commands.hybrid_command(
