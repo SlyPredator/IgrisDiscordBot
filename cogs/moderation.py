@@ -340,19 +340,23 @@ class Moderation(commands.Cog, name="moderation"):
     @commands.bot_has_permissions(manage_messages=True)
     @checks.not_blacklisted()
     @checks.is_moderator()
-    async def lock(self, context: Context) -> None:
+    async def lock(self, context: Context, channel_id: str = None) -> None:
         """
         Lock a channel.
 
         :param context: The hybrid command context.
+        :param channel_id: The ID of the channel to be locked
         """
-        await context.message.channel.set_permissions(
+        channel = context.message.channel
+        if channel_id:
+            channel = context.guild.get_channel(int(channel_id))
+        await channel.set_permissions(
             context.guild.default_role, send_messages=False
         )
-        await context.message.channel.set_permissions(
+        await channel.set_permissions(
             context.guild.get_role(1071850619293417536), send_messages=True
         )
-        await context.send(context.channel.mention + " ***is now in lockdown.***")
+        await context.send(channel.mention + " ***is now in lockdown.***")
 
     @commands.hybrid_command(
         name="unlock",
@@ -361,16 +365,20 @@ class Moderation(commands.Cog, name="moderation"):
     @commands.bot_has_permissions(manage_messages=True)
     @checks.not_blacklisted()
     @checks.is_moderator()
-    async def unlock(self, context: Context) -> None:
+    async def unlock(self, context: Context, channel_id: str = None) -> None:
         """
         Unlock a channel.
 
         :param context: The hybrid command context.
+        :param channel_id: The ID of the channel to be unlocked
         """
-        await context.message.channel.set_permissions(
+        channel = context.message.channel
+        if channel_id:
+            channel = context.guild.get_channel(int(channel_id))
+        await channel.set_permissions(
             context.guild.default_role, send_messages=True
         )
-        await context.send(context.channel.mention + " ***is now unlocked.***")
+        await context.send(channel.mention + " ***is now unlocked.***")
 
 
 async def setup(bot):
