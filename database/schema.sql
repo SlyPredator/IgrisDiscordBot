@@ -16,3 +16,8 @@ CREATE TABLE IF NOT EXISTS `todos` (
   `user_id` varchar(20) NOT NULL,
   `task` varchar(50) NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS `reputation` (
+  `user_id` varchar(20) NOT NULL,
+  `rep` int NOT NULL
+);
