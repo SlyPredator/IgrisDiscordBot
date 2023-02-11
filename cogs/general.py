@@ -260,20 +260,20 @@ class General(commands.Cog, name="general"):
         description="Manage To-Dos.",
     )
     @checks.not_blacklisted()
-    async def todo(self, context=Context, *, task: str = None) -> None:
+    async def todo(self, context=Context, action: str = None, *, task_option: str = None) -> None:
         """
         List, enlist, delist to-dos.
 
         :param context: The hybrid command context.
-        :param task: The task to be added.
+        :param task_prompt: The options available (add, list, delete, clear).
         """
-        if task is None:
+        if action is None or action.lower() not in ["add", "list", "clear", "delete"]:
             embed = discord.Embed(
-                description="You need to specify a subcommand.\n\n**Subcommands:**\n`<taskname>` - Add a task to your list.\n`list` - View your task list.\n`delete` - Remove a task from your list.\n`clear` - Clear your task list.",
+                description="You need to specify a valid subcommand.\n\n**Subcommands:**\n`add <taskname>` - Add a task to your list.\n`list` - View your task list.\n`delete <tasknumber>` - Remove a task from your list.\n`clear` - Clear your task list.",
                 color=0xE02B2B,
             )
             await context.send(embed=embed)
-        if task.split(" ")[0] == "list" and task != None:
+        if action.lower() == "list":
             todos_list = await db_manager.get_user_todos(context.author.id)
             embed = discord.Embed(
                 description=f"List of {context.author.name}'s To-Dos.\n", color=0x9C84EF
@@ -290,26 +290,29 @@ class General(commands.Cog, name="general"):
                 embed.add_field(name="Make some to-dos!", value="", inline=False)
             embed.set_footer(text=f"Requested by {context.author}")
             await context.send(embed=embed)
-        if task.split(" ")[0] == "delete" and task != None:
+        if action.lower() == "delete":
             todo = await db_manager.delete_user_todo(
-                context.author.id, int(task.split(" ")[1])
+                context.author.id, int(task_option)
             )
             embed = discord.Embed(
                 description=f"Successfully deleted task {todo}.", color=0x9C84EF
             )
             await context.send(embed=embed)
-        if task.split(" ")[0] == "clear" and task != None:
+        if action.lower() == "clear":
             await db_manager.clear_user_todos(context.author.id)
             embed = discord.Embed(
                 description=f"Successfully cleared your task list.", color=0x9C84EF
             )
             await context.send(embed=embed)
-        elif task.split(" ")[0] not in ["list", "delete", "clear", None]:
-            todo = await db_manager.add_todo(context.author.id, task)
-            embed = discord.Embed(
-                description=f"Successfully added the task **{todo}**.", color=0x9C84EF
-            )
-            await context.send(embed=embed)
+        elif action.lower() == "add":
+            if task_option:
+                todo = await db_manager.add_todo(context.author.id, task_option)
+                embed = discord.Embed(
+                    description=f"Successfully added the task **{todo}**.", color=0x9C84EF
+                )
+                await context.send(embed=embed)
+            else:
+                await context.send("Task to be added is missing!!")
 
     @commands.hybrid_command(
         name="poll",
@@ -321,6 +324,7 @@ class General(commands.Cog, name="general"):
         Create a poll.
 
         :param context: The hybrid command context.
+        :param poll_prompt: The prompt including the question and options for polling.
         """
         poll_options = re.findall('"([^"]*)"', poll_prompt)
         poll_question = poll_prompt.partition('"')[0]
