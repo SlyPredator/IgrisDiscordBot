@@ -105,7 +105,7 @@ class Fun(commands.Cog, name="fun"):
         description="Pick a choice amongst given choices.",
     )
     @checks.not_blacklisted()
-    async def roll(self, context: Context, *, choices: str) -> None:
+    async def pick(self, context: Context, *, choices: str) -> None:
         """
         Pick a choice amongst given choices.
 
