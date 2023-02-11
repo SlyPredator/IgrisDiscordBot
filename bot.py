@@ -13,6 +13,7 @@ from discord.ext.commands import Bot, Context
 from dotenv import load_dotenv
 
 import exceptions
+from keep_alive import keep_alive
 
 
 load_dotenv()
@@ -303,7 +304,7 @@ async def load_cogs() -> None:
                 exception = f"{type(e).__name__}: {e}"
                 bot.logger.error(f"Failed to load extension {extension}\n{exception}")
 
-
+keep_alive()
 asyncio.run(init_db())
 asyncio.run(load_cogs())
 bot.run(token)
