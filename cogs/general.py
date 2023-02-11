@@ -316,14 +316,14 @@ class General(commands.Cog, name="general"):
         description="Create a poll.",
     )
     @checks.not_blacklisted()
-    async def poll(self, context: Context) -> None:
+    async def poll(self, context: Context, *, poll_prompt: str ) -> None:
         """
         Create a poll.
 
         :param context: The hybrid command context.
         """
-        poll_options = re.findall('"([^"]*)"', context.message.content)
-        poll_question = context.message.content.partition('"')[0].split("*poll")[1]
+        poll_options = re.findall('"([^"]*)"', poll_prompt)
+        poll_question = poll_prompt.partition('"')[0]
         embed = discord.Embed(
             description=f"{context.author.name}'s Poll", color=0x9C84EF
         )
