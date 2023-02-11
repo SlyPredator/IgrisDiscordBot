@@ -10,14 +10,8 @@ import aiosqlite
 import discord
 from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context
-from dotenv import load_dotenv
 
 import exceptions
-
-load_dotenv()
-
-token = os.getenv("BOT_TOKEN")
-app_id = os.getenv("BOT_APPLICATION_ID")
 
 if not os.path.isfile(f"{os.path.realpath(os.path.dirname(__file__))}/config.json"):
     sys.exit("'config.json' not found! Please add it and try again.")
@@ -306,4 +300,4 @@ async def load_cogs() -> None:
 
 asyncio.run(init_db())
 asyncio.run(load_cogs())
-bot.run(token)
+bot.run(config["bot_token"])

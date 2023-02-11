@@ -147,6 +147,7 @@ cython_debug/
 discord.log
 
 # Choice Files
+config.json
 TODO.md
 todos.dat
 lore.txt
