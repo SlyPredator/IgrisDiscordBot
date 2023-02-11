@@ -166,9 +166,7 @@ class Owner(commands.Cog, name="owner"):
         await context.send(embed=embed)
 
     @commands.hybrid_command(
-        name="shutdown",
-        description="Make the bot shutdown.",
-        aliases=["sd"]
+        name="shutdown", description="Make the bot shutdown.", aliases=["sd"]
     )
     @checks.is_owner()
     async def shutdown(self, context: Context) -> None:

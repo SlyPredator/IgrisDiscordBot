@@ -260,12 +260,15 @@ class General(commands.Cog, name="general"):
         description="Manage To-Dos.",
     )
     @checks.not_blacklisted()
-    async def todo(self, context=Context, action: str = None, *, task_option: str = None) -> None:
+    async def todo(
+        self, context=Context, action: str = None, *, task_option: str = None
+    ) -> None:
         """
         List, enlist, delist to-dos.
 
         :param context: The hybrid command context.
-        :param task_prompt: The options available (add, list, delete, clear).
+        :param action: The options available (add, list, delete, clear).
+        :param task_option: Accompanying command for `add` and `delete`.
         """
         if action is None or action.lower() not in ["add", "list", "clear", "delete"]:
             embed = discord.Embed(
@@ -308,7 +311,8 @@ class General(commands.Cog, name="general"):
             if task_option:
                 todo = await db_manager.add_todo(context.author.id, task_option)
                 embed = discord.Embed(
-                    description=f"Successfully added the task **{todo}**.", color=0x9C84EF
+                    description=f"Successfully added the task **{todo}**.",
+                    color=0x9C84EF,
                 )
                 await context.send(embed=embed)
             else:
@@ -319,7 +323,7 @@ class General(commands.Cog, name="general"):
         description="Create a poll.",
     )
     @checks.not_blacklisted()
-    async def poll(self, context: Context, *, poll_prompt: str ) -> None:
+    async def poll(self, context: Context, *, poll_prompt: str) -> None:
         """
         Create a poll.
 
