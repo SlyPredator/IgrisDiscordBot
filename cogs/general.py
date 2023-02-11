@@ -228,7 +228,7 @@ class General(commands.Cog, name="general"):
         aliases=["csl"],
     )
     @checks.not_blacklisted()
-    async def change_server_logo(self, context=Context) -> None:
+    async def change_server_logo(self, context: Context) -> None:
         """
         Get the status of the attachments.
 
@@ -261,7 +261,7 @@ class General(commands.Cog, name="general"):
     )
     @checks.not_blacklisted()
     async def todo(
-        self, context=Context, action: str = None, *, task_option: str = None
+        self, context: Context, action: str = None, *, task_option: str = None
     ) -> None:
         """
         List, enlist, delist to-dos.

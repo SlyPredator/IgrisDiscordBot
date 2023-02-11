@@ -1,6 +1,7 @@
 import os
 
 import aiosqlite
+import asyncio
 
 DATABASE_PATH = f"{os.path.realpath(os.path.dirname(__file__))}/../database/database.db"
 
@@ -214,3 +215,93 @@ async def delete_user_todo(user_id: int, task_id: int):
         await db.execute(f"DELETE FROM todos WHERE task='{task_result}';")
         await db.commit()
         return task_result
+
+
+async def add_rep(user_id: int, rep_count: int):
+    """
+    This function will add reputation to a user in the database.
+
+    :param user_id: The ID of the user whose todo is to be added.
+    :param rep_count: The number of reps to be added to a user.
+    """
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        async with db.execute(
+            f"SELECT * from reputation where user_id = {user_id}"
+        ) as cursor:
+            result = await cursor.fetchall()
+            if result:
+                await db.execute(
+                    "UPDATE reputation SET rep = rep + ? WHERE user_id = ?;",
+                    (rep_count, user_id),
+                )
+                await db.commit()
+            else:
+                await db.execute(
+                    "INSERT INTO reputation(user_id, rep) VALUES (?, ?)",
+                    (user_id, rep_count),
+                )
+                await db.commit()
+
+
+async def get_user_rep(user_id: int) -> list:
+    """
+    This function will return the reputation count of a user.
+
+    :param user_id: The ID of the user that should be checked.
+    :return: The reputation count of the requested user.
+    """
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        async with db.execute(f"SELECT * FROM reputation ORDER BY rep DESC") as cursor:
+            result = await cursor.fetchall()
+            if result:
+                for each in enumerate(result, 1):
+                    if each[1][0] == str(user_id):
+                        return each
+            return None
+
+
+async def del_rep(user_id: int, rep_count: int):
+    """
+    This function will delete reputation from a user in the database.
+
+    :param user_id: The ID of the user whose todo is to be added.
+    :param rep_count: The number of reps to be deleted from a user.
+    """
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        async with db.execute(
+            f"SELECT * from reputation where user_id = {user_id}"
+        ) as cursor:
+            result = await cursor.fetchall()
+            if result:
+                await db.execute(
+                    "UPDATE reputation SET rep = rep - ? WHERE user_id = ?;",
+                    (rep_count, user_id),
+                )
+                await db.commit()
+
+
+async def clear_rep():
+    """
+    This function will delete all reputation from all users in the database.
+    """
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        await db.execute("DELETE FROM reputation;")
+        await db.commit()
+
+
+async def get_all_rep() -> list:
+    """
+    This function will return the all reputation points of all users.
+
+    :return: The reputation list.
+    """
+    async with aiosqlite.connect(DATABASE_PATH) as db:
+        async with db.execute(f"SELECT * FROM reputation ORDER BY rep DESC") as cursor:
+            result = await cursor.fetchall()
+            rep_data = []
+            for each in enumerate(result, 1):
+                res = []
+                for x in each[0], each[1][0], each[1][1]:
+                    res.append(x)
+                rep_data.append(res)
+            return rep_data
