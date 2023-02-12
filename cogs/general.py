@@ -63,6 +63,7 @@ class General(commands.Cog, name="general"):
         embed = discord.Embed(description="Made with ♥ by SlyPrey", color=0x9C84EF)
         embed.set_author(name="Bot Information")
         embed.add_field(name="Owner:", value="SlyPrey#6688", inline=True)
+        embed.set_thumbnail(context.guild.get_member(958306459668582410).avatar)
         embed.add_field(
             name="Python Version:", value=f"{platform.python_version()}", inline=True
         )
