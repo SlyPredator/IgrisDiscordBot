@@ -2,6 +2,8 @@ import pickle
 import platform
 import random
 import re
+import datetime
+from dateutil.relativedelta import relativedelta
 
 import aiohttp
 import aiosqlite
@@ -18,7 +20,8 @@ from helpers import checks, db_manager
 class General(commands.Cog, name="general"):
     def __init__(self, bot):
         self.bot = bot
-
+        self.bot.launch_time = datetime.datetime.utcnow()
+    
     @commands.hybrid_command(
         name="help", description="List all commands the bot has loaded."
     )
@@ -351,6 +354,23 @@ class General(commands.Cog, name="general"):
             emojiname = str(num) + "\ufe0f\u20e3"
             await poll_embed.add_reaction(emojiname)
 
+    @commands.command(name='uptime')
+    async def uptime(self, ctx: commands.Context):
+        """Gets the uptime of the bot"""
+        
+        delta_uptime = relativedelta(datetime.datetime.utcnow(), self.bot.launch_time)
+        days, hours, minutes, seconds = delta_uptime.days, delta_uptime.hours, delta_uptime.minutes, delta_uptime.seconds
+
+        uptimes = {x[0]: x[1] for x in [('days', days), ('hours', hours),
+                                        ('minutes', minutes), ('seconds', seconds)] if x[1]}
+
+        last = "".join(value for index, value in enumerate(uptimes.keys()) if index == len(uptimes)-1)
+        uptime_string = "".join(
+            f"{v} {k}" if k != last else f" and {v} {k}" if len(uptimes) != 1 else f"{v} {k}"
+            for k, v in uptimes.items()
+        )
+        
+        await ctx.channel.send(f'I started **{uptime_string}** ago.')
 
 async def setup(bot):
     await bot.add_cog(General(bot))

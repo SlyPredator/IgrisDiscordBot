@@ -5,6 +5,7 @@ import os
 import platform
 import random
 import sys
+import datetime
 
 import aiosqlite
 import discord
@@ -158,6 +159,7 @@ async def on_ready() -> None:
     bot.logger.info(f"Running on: {platform.system()} {platform.release()} ({os.name})")
     bot.logger.info("-------------------")
     status_task.start()
+    bot.launch_time = datetime.datetime.utcnow()
     await bot.tree.sync(guild=discord.Object(id=925389494302154823))
     if config["sync_commands_globally"]:
         bot.logger.info("Syncing commands globally...")
@@ -169,7 +171,7 @@ async def status_task() -> None:
     """
     Setup the game status task of the bot.
     """
-    statuses = ["with you!", "with your mom!", "with humans!", "Little kids!", "Sly!"]
+    statuses = ["with you!", "with your mom!", "with humans!", "with little kids!", "with Sly!"]
     await bot.change_presence(activity=discord.Game(random.choice(statuses)))
 
 
