@@ -171,7 +171,13 @@ async def status_task() -> None:
     """
     Setup the game status task of the bot.
     """
-    statuses = ["with you!", "with your mom!", "with humans!", "with little kids!", "with Sly!"]
+    statuses = [
+        "with you!",
+        "with your mom!",
+        "with humans!",
+        "with little kids!",
+        "with Sly!",
+    ]
     await bot.change_presence(activity=discord.Game(random.choice(statuses)))
 
 
@@ -305,6 +311,7 @@ async def load_cogs() -> None:
             except Exception as e:
                 exception = f"{type(e).__name__}: {e}"
                 bot.logger.error(f"Failed to load extension {extension}\n{exception}")
+
 
 keep_alive()
 asyncio.run(init_db())

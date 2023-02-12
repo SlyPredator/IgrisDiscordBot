@@ -350,9 +350,7 @@ class Moderation(commands.Cog, name="moderation"):
         channel = context.message.channel
         if channel_id:
             channel = context.guild.get_channel(int(channel_id))
-        await channel.set_permissions(
-            context.guild.default_role, send_messages=False
-        )
+        await channel.set_permissions(context.guild.default_role, send_messages=False)
         await channel.set_permissions(
             context.guild.get_role(1071850619293417536), send_messages=True
         )
@@ -375,9 +373,7 @@ class Moderation(commands.Cog, name="moderation"):
         channel = context.message.channel
         if channel_id:
             channel = context.guild.get_channel(int(channel_id))
-        await channel.set_permissions(
-            context.guild.default_role, send_messages=True
-        )
+        await channel.set_permissions(context.guild.default_role, send_messages=True)
         await context.send(channel.mention + " ***is now unlocked.***")
 
 
