@@ -1,13 +1,10 @@
 import datetime
-import pickle
 import platform
 import random
 import re
 
 import aiohttp
-import aiosqlite
 import discord
-import requests
 from dateutil.relativedelta import relativedelta
 from discord import app_commands
 from discord.ext import commands
@@ -108,6 +105,59 @@ class General(commands.Cog, name="general"):
         )
         embed.add_field(name=f"Roles ({len(context.guild.roles)})", value=roles)
         embed.set_footer(text=f"Created at: {context.guild.created_at}")
+        await context.send(embed=embed)
+
+    @commands.hybrid_command(
+        name="userinfo",
+        description="Get some useful (or not) information about the user.",
+    )
+    @checks.not_blacklisted()
+    async def userinfo(self, context: Context, user: discord.User = None) -> None:
+        """
+        Get some useful (or not) information about the user.
+
+        :param context: The hybrid command context.
+        :param user: The user requested.
+        """
+
+        def format_string(string):
+            string = string.replace("_", " ")
+            return " ".join([word.capitalize() for word in string.split()])
+
+        if user:
+            user_id = int(user.id)
+            user = context.guild.get_member(user_id)
+        else:
+            user = context.author
+            user_id = int(context.author.id)
+        roles = [role.name for role in user.roles]
+        if len(roles) > 50:
+            roles = roles[:50]
+            roles.append(f">>>> Displaying[50/{len(roles)}] Roles")
+        role = ", ".join(roles)
+        embed = discord.Embed(
+            title="**Username:**", description=f"{user}", color=0x9C84EF
+        )
+        av = user.display_avatar
+        if av is not None:
+            embed.set_thumbnail(url=av)
+        embed.add_field(name="Member ID", value=user.id)
+        embed.add_field(name=f"Roles ({len(roles)})", value=role)
+        perms_list = [
+            format_string(perm) for perm, value in user.guild_permissions if value
+        ]
+        permission_names = ", ".join(sorted(perms_list))
+        embed.add_field(
+            name=f"Permissions ({len(perms_list)})",
+            value=f"{permission_names}",
+            inline=False,
+        )
+        embed.add_field(
+            name="Joined on:", value=f"{user.joined_at.strftime('%Y/%m/%d')}"
+        )
+        embed.add_field(
+            name=f"Created on: ", value=f"{user.created_at.strftime('%Y/%m/%d')}"
+        )
         await context.send(embed=embed)
 
     @commands.hybrid_command(
