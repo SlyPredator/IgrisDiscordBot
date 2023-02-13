@@ -5,6 +5,7 @@
   <a href="https://github.com/SlyPredator/IgrisDiscordBot/blob/main/LICENSE.md"><img src="https://img.shields.io/github/license/SlyPredator/IgrisDiscordBot""></a>
   <a href="https://github.com/SlyPredator/IgrisDiscordBot"><img src="https://img.shields.io/github/languages/code-size/SlyPredator/IgrisDiscordBot"></a>
   <a href="https://github.com/SlyPredator/IgrisDiscordBot/issues"><img src="https://img.shields.io/github/issues-raw/SlyPredator/IgrisDiscordBot"></a>
+  <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style: black"></a>
   <a href="https://conventionalcommits.org/en/v1.0.0/"><img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white"></a>
 </p>
 
