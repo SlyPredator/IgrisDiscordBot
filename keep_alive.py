@@ -1,6 +1,7 @@
 # keep_alive.py
-from flask import Flask, current_app
 from threading import Thread
+
+from flask import Flask, current_app
 
 app = Flask("")
 

@@ -1,14 +1,14 @@
+import datetime
 import pickle
 import platform
 import random
 import re
-import datetime
-from dateutil.relativedelta import relativedelta
 
 import aiohttp
 import aiosqlite
 import discord
 import requests
+from dateutil.relativedelta import relativedelta
 from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
@@ -388,9 +388,9 @@ class General(commands.Cog, name="general"):
             if index == len(uptimes) - 1
         )
         uptime_string = "".join(
-            f"{v} {k}"
+            f"{v} {k} "
             if k != last
-            else f" and {v} {k}"
+            else f"and {v} {k}"
             if len(uptimes) != 1
             else f"{v} {k}"
             for k, v in uptimes.items()

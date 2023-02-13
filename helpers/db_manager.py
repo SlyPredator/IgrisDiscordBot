@@ -1,7 +1,7 @@
+import asyncio
 import os
 
 import aiosqlite
-import asyncio
 
 DATABASE_PATH = f"{os.path.realpath(os.path.dirname(__file__))}/../database/database.db"
 

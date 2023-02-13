@@ -1,11 +1,11 @@
 import asyncio
+import datetime
 import json
 import logging
 import os
 import platform
 import random
 import sys
-import datetime
 
 import aiosqlite
 import discord
@@ -15,7 +15,6 @@ from dotenv import load_dotenv
 
 import exceptions
 from keep_alive import keep_alive
-
 
 load_dotenv()
 
