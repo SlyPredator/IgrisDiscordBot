@@ -1,11 +1,16 @@
+import os
 import random
 
 import aiohttp
 import discord
+import requests
 from discord.ext import commands
 from discord.ext.commands import Context
+from dotenv import load_dotenv
 
 from helpers import checks
+
+load_dotenv()
 
 
 class Fun(commands.Cog, name="fun"):
@@ -114,6 +119,44 @@ class Fun(commands.Cog, name="fun"):
         """
         choice = random.choice(choices.split(" "))
         await context.send(choice)
+
+    @commands.hybrid_command(
+        name="meme",
+        description="Show a random meme.",
+    )
+    @checks.not_blacklisted()
+    async def meme(self, context: Context) -> None:
+        """
+        Show a random meme.
+
+        :param context: The hybrid command context.
+        """
+        rsa_token = os.getenv("RS_API_TOKEN")
+        ra_token = os.getenv("RAPIDAPI_TOKEN")
+        url = "https://random-stuff-api.p.rapidapi.com/reddit/RandomMeme"
+        querystring = {"searchType": "rising"}
+        headers = {
+            "authorization": rsa_token,
+            "x-rapidapi-host": "random-stuff-api.p.rapidapi.com",
+            "x-rapidapi-key": ra_token,
+        }
+
+        def get_meme():
+            response = requests.request("GET", url, headers=headers, params=querystring)
+            global meme_response
+            meme_response = response.json()
+            if meme_response["image"]:
+                meme_response = response.json()
+            else:
+                get_meme()
+
+        get_meme()
+        embed = discord.Embed(
+            description=f'**{meme_response["title"]}**', color=0x9C84EF
+        )
+        embed.set_image(url=meme_response["image"])
+        embed.set_footer(text=f"r/{meme_response['subreddit']}")
+        await context.send(embed=embed)
 
 
 async def setup(bot):
