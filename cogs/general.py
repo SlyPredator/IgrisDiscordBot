@@ -1,3 +1,4 @@
+import ast
 import datetime
 import platform
 import random
@@ -9,8 +10,8 @@ from dateutil.relativedelta import relativedelta
 from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
-from num2words import num2words
 from googletrans import Translator
+from num2words import num2words
 
 from helpers import checks, db_manager
 
@@ -450,9 +451,7 @@ class General(commands.Cog, name="general"):
         await ctx.channel.send(f"I started **{uptime_string}** ago.")
 
     @commands.command(
-        name="translate",
-        description="Translate something.",
-        aliases=["trans"]
+        name="translate", description="Translate something.", aliases=["trans"]
     )
     @checks.not_blacklisted()
     async def translate(self, context: Context, *, tr_str: str) -> None:
@@ -460,10 +459,47 @@ class General(commands.Cog, name="general"):
         Translate a message.
 
         :param context: The hybrid command context.
+        :param tr_str: The text to be translated.
         """
         translator = Translator()
         translated = translator.translate(tr_str).__dict__()["text"]
         await context.reply(translated)
+
+    @commands.hybrid_command(
+        name="math",
+        description="Calculate an expression.",
+        aliases=["calc", "calculate"],
+    )
+    @checks.not_blacklisted()
+    async def math(self, context: Context, *, expression: str) -> None:
+        """
+        Solve math equations.
+
+        :param context: The hybrid command context.
+        :param expression: The expression to be evaluated.
+        """
+        try:
+            tree = ast.parse(expression, mode="eval")
+        except SyntaxError:
+            return  # not a Python expression
+        if not all(
+            isinstance(
+                node,
+                (
+                    ast.Expression,
+                    ast.UnaryOp,
+                    ast.unaryop,
+                    ast.BinOp,
+                    ast.operator,
+                    ast.Num,
+                ),
+            )
+            for node in ast.walk(tree)
+        ):
+            return  # not a mathematical expression (numbers and operators)
+        result = eval(compile(tree, filename="", mode="eval"))
+        await context.send(result)
+
 
 async def setup(bot):
     await bot.add_cog(General(bot))
