@@ -10,6 +10,7 @@ from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
 from num2words import num2words
+from googletrans import Translator
 
 from helpers import checks, db_manager
 
@@ -448,6 +449,21 @@ class General(commands.Cog, name="general"):
 
         await ctx.channel.send(f"I started **{uptime_string}** ago.")
 
+    @commands.command(
+        name="translate",
+        description="Translate something.",
+        aliases=["trans"]
+    )
+    @checks.not_blacklisted()
+    async def translate(self, context: Context, *, tr_str: str) -> None:
+        """
+        Translate a message.
+
+        :param context: The hybrid command context.
+        """
+        translator = Translator()
+        translated = translator.translate(tr_str).__dict__()["text"]
+        await context.reply(translated)
 
 async def setup(bot):
     await bot.add_cog(General(bot))
