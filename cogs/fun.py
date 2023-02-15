@@ -98,6 +98,8 @@ class Fun(commands.Cog, name="fun"):
         :param context: The hybrid command context.
         :param max_range: The upper end of the range.
         """
+        if max_range.isalpha():
+            max_range = 100
         result = random.randint(0, int(max_range))
         embed = discord.Embed(
             description=f":game_die: **{context.author.name}** rolls **{result}**! :game_die:",
