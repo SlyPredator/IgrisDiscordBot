@@ -160,6 +160,43 @@ class Fun(commands.Cog, name="fun"):
         embed.set_footer(text=f"r/{meme_response['subreddit']}")
         await context.send(embed=embed)
 
+    @commands.hybrid_command(
+        name="dadjoke", description="Show a random meme.", aliases=["dj"]
+    )
+    @checks.not_blacklisted()
+    async def dadjoke(self, context: Context) -> None:
+        """
+        Tell a random dad joke.
+
+        :param context: The hybrid command context.
+        """
+        rsa_token = os.getenv("RS_API_TOKEN")
+        ra_token = os.getenv("RAPIDAPI_TOKEN")
+        url = "https://random-stuff-api.p.rapidapi.com/reddit/FetchSubredditPost"
+        querystring = {"searchType": "hot", "subreddit": "dadjokes"}
+        headers = {
+            "authorization": rsa_token,
+            "x-rapidapi-host": "random-stuff-api.p.rapidapi.com",
+            "x-rapidapi-key": ra_token,
+        }
+
+        def get_joke():
+            response = requests.request("GET", url, headers=headers, params=querystring)
+            global joke_response
+            joke_response = response.json()
+            if not joke_response["image"]:
+                joke_response = response.json()
+            else:
+                get_joke()
+
+        get_joke()
+        embed = discord.Embed(
+            description=f'**{joke_response["title"]}**', color=0x9C84EF
+        )
+        embed.add_field(name="", value=joke_response["text"])
+        embed.set_footer(text=f"r/{joke_response['subreddit']}")
+        await context.send(embed=embed)
+
 
 async def setup(bot):
     await bot.add_cog(Fun(bot))
