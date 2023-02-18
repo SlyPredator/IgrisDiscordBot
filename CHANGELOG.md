@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/SlyPredator/IgrisDiscordBot/compare/v1.1.0...v1.2.0) (2023-02-18)
+
+
+### Features
+
+* meme command (and change in landing page) ([89fe063](https://github.com/SlyPredator/IgrisDiscordBot/commit/89fe063a4861ab5804aa9f5612a25a01d66bffed))
+* simple math command ([4e596fb](https://github.com/SlyPredator/IgrisDiscordBot/commit/4e596fb6e7d5f9eeb81059367a6819ed4f97f859))
+* translate command ([93d3c94](https://github.com/SlyPredator/IgrisDiscordBot/commit/93d3c94a0e5d1196b442d99f0319b1847d63eacd))
+
+
+### Bug Fixes
+
+* roll error on max_range being str ([54788f4](https://github.com/SlyPredator/IgrisDiscordBot/commit/54788f4927a6526c2b72234bdd18c9511c5826b6))
+
 ## 1.1.0 (2023-02-14)
 
 
