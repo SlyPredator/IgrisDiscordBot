@@ -203,7 +203,7 @@ class Fun(commands.Cog, name="fun"):
         aliases=["pp"],
     )
     @checks.not_blacklisted()
-    async def dadjoke(self, context: Context) -> None:
+    async def dick_size(self, context: Context) -> None:
         """
         Decide the size of a user's weiner.
 
