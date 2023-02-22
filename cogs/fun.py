@@ -197,6 +197,24 @@ class Fun(commands.Cog, name="fun"):
         embed.set_footer(text=f"r/{joke_response['subreddit']}")
         await context.send(embed=embed)
 
+    @commands.hybrid_command(
+        name="dick_size",
+        description="Decide the length of a user's weiner.",
+        aliases=["pp"],
+    )
+    @checks.not_blacklisted()
+    async def dadjoke(self, context: Context) -> None:
+        """
+        Decide the size of a user's weiner.
+
+        :param context: The hybrid command context.
+        """
+        embed = discord.Embed(
+            description=f"**{context.author.name}**'s pp size", color=0x9C84EF
+        )
+        embed.add_field(name="", value=f"8{random.randint(0,20)*'='}D")
+        await context.send(embed=embed)
+
 
 async def setup(bot):
     await bot.add_cog(Fun(bot))
