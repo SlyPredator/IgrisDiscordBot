@@ -215,6 +215,27 @@ class Fun(commands.Cog, name="fun"):
         embed.add_field(name="", value=f"8{random.randint(0,20)*'='}D")
         await context.send(embed=embed)
 
+    @commands.hybrid_command(name="bon", description="Ban but bon.")
+    @checks.not_blacklisted()
+    async def bon(
+        self, context: Context, user: discord.User = None, *, reason: str = "No reason."
+    ) -> None:
+        """
+        Troll ban.
+
+        :param context: The hybrid command context.
+        :param user: The user to be bonned.
+        """
+        if user == None:
+            pass
+        elif user:
+            purged_messages = await context.channel.purge(limit=1)
+            embed = discord.Embed(
+                description=f":white_check_mark:  **{user}** has been banned. | **{reason}**",
+                color=0x77B255,
+            )
+            await context.send(embed=embed)
+
 
 async def setup(bot):
     await bot.add_cog(Fun(bot))
