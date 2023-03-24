@@ -2,3 +2,8 @@ aiohttp
 aiosqlite
 discord.py
 num2words
+python-dotenv
+flask
+python-dateutil
+requests
+googletrans==4.0.0-rc1
