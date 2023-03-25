@@ -66,6 +66,14 @@ Here is an explanation of what everything is:
 }
 ```
 
+There's also a `.env` file required, with the following keys:
+
+```
+BOT_TOKEN="Your Bot Token from Discord Developer Portal"
+RS_API_TOKEN="Random Stuff API Key"
+RAPIDAPI_TOKEN="RapidAPI Key"
+```
+
 ## How to start
 
 To start the bot you simply need to launch, either your terminal (Linux, Mac & Windows), or your Command Prompt (
